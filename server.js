@@ -14,10 +14,10 @@ const port = 3000;
 
 // ==================== CONECTARE LA BAZA DE DATE ====================
 const pool = new Pool({
-  user: 'process.env.DB_USER',
-  host: 'process.env.DB_HOST',
-  database: 'process.env.DB_NAME',
-  password: 'process.env.DB_PASSWORD', // parola ta de la PostgreSQL
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD, // parola ta de la PostgreSQL
   port: process.env.DB_PORT,
 });
 
