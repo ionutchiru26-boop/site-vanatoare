@@ -107,6 +107,16 @@ app.get("/logout", (req, res) => {
 app.get("/", (req, res) => {
   res.render("home", { user: req.session.user || null });
 });
+// ================== PROFIL ==================
+app.get("/profile", (req, res) => {
+  // dacă nu este autentificat, redirecționează către login
+  if (!req.session.user) {
+    return res.redirect("/login");
+  }
+
+  // dacă este autentificat, afișează pagina de profil
+  res.render("profile", { user: req.session.user });
+});
 
 // ==================== TESTARE CONEXIUNE DB ====================
 app.get("/test-db", async (req, res) => {

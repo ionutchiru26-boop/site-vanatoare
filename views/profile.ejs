@@ -3,22 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acasă | Site Vânătoare</title>
+  <title>Profil | Site Vânătoare</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #ecf0f1;
+      background: #f4f6f7;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      text-align: center;
       margin: 0;
+      text-align: center;
     }
 
     h1 {
       color: #2c3e50;
+    }
+
+    .card {
+      background: white;
+      padding: 25px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+    }
+
+    p {
+      color: #555;
+      font-size: 18px;
     }
 
     a {
@@ -26,8 +39,8 @@
       color: white;
       background-color: #3498db;
       padding: 10px 20px;
-      border-radius: 5px;
-      margin: 5px;
+      border-radius: 6px;
+      margin-top: 20px;
       display: inline-block;
       transition: background-color 0.3s;
     }
@@ -43,25 +56,16 @@
     .logout:hover {
       background-color: #c0392b;
     }
-
-    .user-info {
-      margin-top: 10px;
-      font-size: 18px;
-      color: #34495e;
-    }
   </style>
 </head>
 <body>
-  <h1>🏕️ Bine ai venit pe Site-ul de Vânătoare!</h1>
+  <div class="card">
+    <h1>👤 Profil Utilizator</h1>
+    <p><strong>Username:</strong> <%= user.username %></p>
+    <p><strong>ID:</strong> <%= user.id %></p>
 
-  <% if (user) { %>
-    <div class="user-info">
-      Salut, <strong><%= user.username %></strong>! 👋
-    </div>
+    <a href="/">🏠 Pagina principală</a>
     <a href="/logout" class="logout">Deconectare</a>
-  <% } else { %>
-    <a href="/login">Autentificare</a>
-    <a href="/register">Înregistrare</a>
-  <% } %>
+  </div>
 </body>
 </html>
