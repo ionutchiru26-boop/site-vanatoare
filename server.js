@@ -71,7 +71,7 @@ app.post('/login', async (req, res) => {
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder");
 
 // ================== CONECTARE BAZĂ DE DATE ==================
-const dbUrl = process.env.DATABASE_URL;
+
 
 let pool;
 try {
