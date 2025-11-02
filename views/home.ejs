@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acasă - Site Vânătoare</title>
+  <title>Acasă | Site Vânătoare</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,34 +14,54 @@
       justify-content: center;
       height: 100vh;
       text-align: center;
+      margin: 0;
     }
+
     h1 {
       color: #2c3e50;
     }
+
     a {
       text-decoration: none;
       color: white;
       background-color: #3498db;
       padding: 10px 20px;
       border-radius: 5px;
-      margin: 10px;
+      margin: 5px;
       display: inline-block;
+      transition: background-color 0.3s;
     }
+
     a:hover {
       background-color: #2980b9;
+    }
+
+    .logout {
+      background-color: #e74c3c;
+    }
+
+    .logout:hover {
+      background-color: #c0392b;
+    }
+
+    .user-info {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #34495e;
     }
   </style>
 </head>
 <body>
   <h1>🏕️ Bine ai venit pe Site-ul de Vânătoare!</h1>
-  <p>
-    <% if (user) { %>
-      Salut, <strong><%= user.username %></strong>! <br>
-      <a href="/logout">Deconectare</a>
-    <% } else { %>
-      <a href="/login">Autentificare</a>
-      <a href="/register">Înregistrare</a>
-    <% } %>
-  </p>
+
+  <% if (user) { %>
+    <div class="user-info">
+      Salut, <strong><%= user.username %></strong>! 👋
+    </div>
+    <a href="/logout" class="logout">Deconectare</a>
+  <% } else { %>
+    <a href="/login">Autentificare</a>
+    <a href="/register">Înregistrare</a>
+  <% } %>
 </body>
 </html>

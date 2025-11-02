@@ -92,6 +92,17 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Eroare la autentificare.");
   }
 });
+// ==================== LOGOUT ====================
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("❌ Eroare la deconectare:", err);
+      return res.status(500).send("Eroare la deconectare");
+    }
+    res.redirect("/"); // Înapoi la pagina principală
+  });
+});
+
 // ==================== HOME ====================
 app.get("/", (req, res) => {
   res.render("home", { user: req.session.user || null });
