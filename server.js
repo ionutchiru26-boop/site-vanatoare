@@ -14,11 +14,11 @@ const port = 3000;
 
 // ==================== CONECTARE LA BAZA DE DATE ====================
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'vanatoare',
-  password: 'fifa2003', // parola ta de la PostgreSQL
-  port: 5432,
+  user: 'process.env.DB_USER',
+  host: 'process.env.DB_HOST',
+  database: 'process.env.DB_NAME',
+  password: 'process.env.DB_PASSWORD', // parola ta de la PostgreSQL
+  port: process.env.DB_PORT,
 });
 
 // ==================== CONFIGURARE EXPRESS ====================
