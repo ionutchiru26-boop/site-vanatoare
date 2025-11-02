@@ -92,6 +92,10 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Eroare la autentificare.");
   }
 });
+// ==================== HOME ====================
+app.get("/", (req, res) => {
+  res.render("home", { user: req.session.user || null });
+});
 
 // ==================== TESTARE CONEXIUNE DB ====================
 app.get("/test-db", async (req, res) => {

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acasă - Site Vânătoare</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ecf0f1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+      background-color: #3498db;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin: 10px;
+      display: inline-block;
+    }
+    a:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏕️ Bine ai venit pe Site-ul de Vânătoare!</h1>
+  <p>
+    <% if (user) { %>
+      Salut, <strong><%= user.username %></strong>! <br>
+      <a href="/logout">Deconectare</a>
+    <% } else { %>
+      <a href="/login">Autentificare</a>
+      <a href="/register">Înregistrare</a>
+    <% } %>
+  </p>
+</body>
+</html>
