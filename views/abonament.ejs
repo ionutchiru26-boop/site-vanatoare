@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abonament - Rețete de vânătoare</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <header>
+    <h1>Abonamente</h1>
+    <nav>
+      <a href="/">Acasă</a>
+      <a href="/adauga">Adaugă rețetă</a>
+      <a href="/abonament">Abonament</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="abonamente">
+      <h2>Abonament lunar</h2>
+      <p>Primești acces exclusiv la rețete speciale de vânătoare.</p>
+      <p><strong>Preț:</strong> 15 lei / lună</p>
+
+      <form action="/create-checkout-session" method="POST">
+        <button type="submit" class="btn">Plătește 15 lei</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Rețete de vânătoare | Toate drepturile rezervate</p>
+  </footer>
+</body>
+</html>

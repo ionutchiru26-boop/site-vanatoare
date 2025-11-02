@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Adaugă rețetă</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f7;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 0.3rem;
+    }
+
+    button {
+      background-color: #2e7d32;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    button:hover { background-color: #256628; }
+
+    p {
+      text-align: center;
+      color: red;
+      margin-top: 1rem;
+    }
+
+    a {
+      display: inline-block;
+      text-align: center;
+      margin-top: 1rem;
+      text-decoration: none;
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Adaugă o rețetă nouă</h2>
+    <form action="/adauga" method="POST" enctype="multipart/form-data">
+      <label for="titlu">Titlu:</label>
+      <input type="text" id="titlu" name="titlu" required>
+
+      <label for="descriere">Descriere:</label>
+      <textarea id="descriere" name="descriere" rows="4" required></textarea>
+
+      <label for="timp_preparare">Timp preparare (minute):</label>
+      <input type="number" id="timp_preparare" name="timp_preparare" required>
+
+      <label for="dificultate">Dificultate:</label>
+      <input type="text" id="dificultate" name="dificultate" required>
+
+      <label for="imagine">Imagine:</label>
+      <input type="file" id="imagine" name="imagine">
+
+      <button type="submit">Adaugă rețeta</button>
+    </form>
+
+    <% if (mesaj) { %>
+      <p><%= mesaj %></p>
+    <% } %>
+
+    <a href="/">Înapoi la pagina principală</a>
+  </div>
+</body>
+</html>

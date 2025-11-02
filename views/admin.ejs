@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panou Admin | Rețete de vânătoare</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Panou de administrare</h1>
+    <nav>
+      <a href="/">Acasă</a>
+      <a href="/adauga">Adaugă rețetă</a>
+      <a href="/abonament">Abonamente</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Lista rețetelor existente</h2>
+
+    <% if (retete.length > 0) { %>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Imagine</th>
+            <th>Titlu</th>
+            <th>Timp (min)</th>
+            <th>Dificultate</th>
+            <th>Descriere</th>
+            <th>Acțiuni</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% retete.forEach(r => { %>
+            <tr>
+              <td><%= r.id %></td>
+              <td>
+                <% if (r.imagine) { %>
+                  <img src="<%= r.imagine %>" alt="<%= r.titlu %>" class="mini-img">
+                <% } else { %>
+                  <em>Fără imagine</em>
+                <% } %>
+              </td>
+              <td><%= r.titlu %></td>
+              <td><%= r.timp_preparare %></td>
+              <td><%= r.dificultate %></td>
+              <td><%= r.descriere %></td>
+              <td>
+                <form action="/sterge/<%= r.id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="btn-sterge">🗑️ Șterge</button>
+                </form>
+                <form action="/editeaza/<%= r.id %>" method="GET" style="display:inline;">
+                  <button type="submit" class="btn-editeaza">✏️ Editează</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>Nu există rețete momentan.</p>
+    <% } %>
+  </main>
+
+  <footer>
+    <p>© 2025 Rețete de vânătoare | Panou administrare</p>
+  </footer>
+</body>
+</html>

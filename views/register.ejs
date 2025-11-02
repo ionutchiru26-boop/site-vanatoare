@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Creare cont nou</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-box {
+      background: #fff;
+      padding: 2rem 3rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 400px;
+    }
+    h2 { color: #2e7d32; margin-bottom: 1rem; }
+    label { display: block; text-align: left; margin-top: 1rem; font-weight: bold; }
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      margin-top: 1.2rem;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover { background: #256628; }
+    p { margin-top: 1rem; }
+    a { color: #2e7d32; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>Creare cont nou</h2>
+    <form action="/register" method="POST">
+      <label>Email:</label>
+      <input type="email" name="email" required>
+      <label>Parolă:</label>
+      <input type="password" name="parola" required>
+      <button type="submit">Înregistrează-te</button>
+    </form>
+
+    <% if (mesaj) { %>
+      <p style="color: red;"><%= mesaj %></p>
+    <% } %>
+
+    <p>Ai deja cont? <a href="/login">Conectează-te aici</a></p>
+  </div>
+</body>
+</html>
