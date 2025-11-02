@@ -33,6 +33,15 @@ try {
 } catch (err) {
   console.error("❌ Eroare la conectarea bazei de date:", err.message);
 }
+// TESTARE CONEXIUNE DB =====================
+app.get("/test-db", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SHOW TABLES;");
+    res.send(`<h3>✅ Conexiune OK! Tabelele găsite:</h3><pre>${JSON.stringify(rows, null, 2)}</pre>`);
+  } catch (err) {
+    res.send(`<h3>❌ Eroare la interogare DB:</h3><pre>${err.message}</pre>`);
+  }
+});
 
 // ================== CONFIGURARE EXPRESS ==================
 app.use(express.static(path.join(__dirname, "public")));
@@ -68,6 +77,7 @@ app.get("/", async (req, res) => {
 });
 
 // ================== PORNIRE SERVER ==================
+
 app.listen(port, () => {
-  console.log(`🚀 Serverul rulează la http://localhost:${port}`);
+  console.log(`Serverul rulează pe portul ${port}`);
 });
