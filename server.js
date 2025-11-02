@@ -1,54 +1,55 @@
+// ==================== IMPORTURI ====================
 const express = require('express');
 const path = require('path');
-const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const multer = require('multer');
+const mysql = require('mysql2/promise');
 const Stripe = require('stripe');
 
+// ==================== CONFIGURARE EXPRESS ====================
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-// ==================== CONFIGURARE STRIPE ====================
- const stripe = require('stripe')('sk_test_placeholder');// ← aici pui cheia ta secretă din Stripe (ex: sk_test_...)
-
-// ==================== CONECTARE LA BAZA DE DATE ====================
-const pool = new Pool({
-  user: process.env.DB_USER,
+// ==================== CONECTARE LA BAZA DE DATE (MYSQL) ====================
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD, // parola ta de la PostgreSQL
-  port: process.env.DB_PORT,
+  port: process.env.DB_PORT
 });
 
-// ==================== CONFIGURARE EXPRESS ====================
-app.use(express.static(path.join(__dirname, 'public')));
+// ==================== CONFIGURARE STRIPE ====================
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
+
+// ==================== CONFIGURARE EXPRESS APP ====================
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // ==================== SESIUNI ====================
-app.use(
-  session({
-    secret: 'secretretele',
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+app.use(session({
+  secret: 'secretretele',
+  resave: false,
+  saveUninitialized: true,
+}));
 
 // ==================== CONFIGURARE UPLOAD IMAGINI ====================
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'public/uploads/'),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
 });
 const upload = multer({ storage });
 
 // ==================== PAGINA PRINCIPALĂ ====================
 app.get('/', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM retete ORDER BY id DESC');
-    res.render('index', { retete: result.rows, utilizator: req.session.utilizator });
+    const [retete] = await pool.query('SELECT * FROM retete ORDER BY id DESC');
+    res.render('index', { retete, utilizator: req.session.utilizator });
   } catch (err) {
+    console.error('Eroare la conectarea bazei de date:', err);
     res.send('Eroare la conectarea bazei de date: ' + err.message);
   }
 });
@@ -60,7 +61,7 @@ app.post('/register', async (req, res) => {
   const { email, parola } = req.body;
   try {
     const parolaHash = await bcrypt.hash(parola, 10);
-    await pool.query('INSERT INTO utilizatori (email, parola) VALUES ($1, $2)', [email, parolaHash]);
+    await pool.query('INSERT INTO utilizatori (email, parola) VALUES (?, ?)', [email, parolaHash]);
     res.redirect('/login');
   } catch (err) {
     console.error('Eroare înregistrare:', err);
@@ -74,17 +75,14 @@ app.get('/login', (req, res) => res.render('login', { mesaj: null }));
 app.post('/login', async (req, res) => {
   const { email, parola } = req.body;
   try {
-    const result = await pool.query('SELECT * FROM utilizatori WHERE email = $1', [email]);
-    if (result.rows.length === 0) {
+    const [rows] = await pool.query('SELECT * FROM utilizatori WHERE email = ?', [email]);
+    if (rows.length === 0)
       return res.render('login', { mesaj: 'Email inexistent!' });
-    }
 
-    const user = result.rows[0];
+    const user = rows[0];
     const parolaOk = await bcrypt.compare(parola, user.parola);
-
-    if (!parolaOk) {
+    if (!parolaOk)
       return res.render('login', { mesaj: 'Parolă incorectă!' });
-    }
 
     req.session.utilizator = user;
     res.redirect('/');
@@ -96,8 +94,7 @@ app.post('/login', async (req, res) => {
 
 // ==================== LOGOUT ====================
 app.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/');
+  req.session.destroy(() => res.redirect('/'));
 });
 
 // ==================== ADAUGĂ REȚETĂ ====================
@@ -109,9 +106,10 @@ app.get('/adauga', (req, res) => {
 app.post('/adauga', upload.single('imagine'), async (req, res) => {
   const { titlu, descriere, timp_preparare, dificultate } = req.body;
   const imagine = req.file ? '/uploads/' + req.file.filename : null;
+
   try {
     await pool.query(
-      'INSERT INTO retete (titlu, descriere, timp_preparare, dificultate, imagine) VALUES ($1, $2, $3, $4, $5)',
+      'INSERT INTO retete (titlu, descriere, timp_preparare, dificultate, imagine) VALUES (?, ?, ?, ?, ?)',
       [titlu, descriere, timp_preparare, dificultate, imagine]
     );
     res.redirect('/');
@@ -137,16 +135,17 @@ app.post('/creare-plata', async (req, res) => {
           price_data: {
             currency: 'ron',
             product_data: {
-              name: 'Abonament Premium Rețete de vânătoare',
+              name: 'Abonament Premium Rețete de Vânătoare',
             },
             unit_amount: 1500, // 15 RON
           },
           quantity: 1,
         },
       ],
-      success_url: 'http://localhost:3000/succes',
-      cancel_url: 'http://localhost:3000/abonament',
+      success_url: 'https://site-vanatoare.onrender.com/succes',
+      cancel_url: 'https://site-vanatoare.onrender.com/abonament',
     });
+
     res.redirect(sessionStripe.url);
   } catch (err) {
     console.error('Eroare Stripe:', err);
@@ -154,9 +153,10 @@ app.post('/creare-plata', async (req, res) => {
   }
 });
 
+// ==================== PAGINA SUCCES ====================
 app.get('/succes', async (req, res) => {
   if (!req.session.utilizator) return res.redirect('/login');
-  await pool.query('UPDATE utilizatori SET abonat = true WHERE id = $1', [req.session.utilizator.id]);
+  await pool.query('UPDATE utilizatori SET abonat = true WHERE id = ?', [req.session.utilizator.id]);
   res.render('succes');
 });
 
