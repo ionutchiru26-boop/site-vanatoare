@@ -88,8 +88,8 @@ app.post("/login", async (req, res) => {
 
     res.send("✅ Autentificare reușită!");
   } catch (err) {
-    console.error("❌ Eroare la autentificare:", err);
-    res.status(500).send("Eroare la autentificare.");
+    console.error("❌ Eroare la autentificare:", err.message);
+    res.status(500).send("Eroare la autentificare."+ err.message);
   }
 });
 // ==================== LOGOUT ====================
